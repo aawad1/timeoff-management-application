@@ -1,0 +1,47 @@
+name: ci pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - release/**
+
+  pull_request:
+    branches:
+      - master
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: print building
+        run:
+          echo Building this image
+      - name: building the image
+        run:
+          docker build -t timeoffmanagement:latest .
+      - name: print built
+        run:
+          echo Image built
+
+# i need to put env credentials
+  upload:
+    name: upload
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: print pushing
+        run:
+          echo pushing to dockerhuub
+      - name: push to dockerhub
+      - name: docker login
+          run:
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ DOCKERHUB_PASSWORD }}
+        run:
+          docker tag abdullahawad00/timeoffmanagement:latest
+      - name: print uploaded
+        run:
+          docker push abdullahawad00/timeoffmanagement:latest
