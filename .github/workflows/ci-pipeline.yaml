@@ -16,6 +16,9 @@ jobs:
     #  GIT_SHA_TAG: ${{git rev-parse --short HEAD}}
 
     steps:
+      - name: git checkout
+        uses: actions/checkout@v4
+
       - id: short-sha
         run: echo "sha_commit=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
@@ -32,4 +35,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/timeoff-manegement:${{steps.short-sha.outputs.sha_commit}}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/timeoff-manegement:${{ steps.short-sha.outputs.sha_commit }}
